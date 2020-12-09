@@ -1,4 +1,4 @@
-# mobile_app_posthoop
+# PostHoop Mobile App
 
 A new Flutter project.
 
