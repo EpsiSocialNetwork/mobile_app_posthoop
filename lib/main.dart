@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:mobile_app_posthoop/loginPage/loginPage.dart';
+import 'package:mobile_app_posthoop/welcomePage/welcomePage.dart';
 
-void main() {
-  runApp(MyApp());
-}
+void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'PostHoop App',
       theme: ThemeData(
         // This is the theme of your application.
         //
@@ -26,7 +26,11 @@ class MyApp extends StatelessWidget {
         // closer together (more dense) than on mobile platforms.
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: MyHomePage(title: 'Flutter Demo Home Page'),
+      // home: MyHomePage(title: 'Flutter Demo Home Page'),
+      routes: {
+        '/': (context) => WelcomePage(),
+        '/login': (context) => LoginPage()
+      },
     );
   }
 }
