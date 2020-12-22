@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:mobile_app_posthoop/widget/button/greyButton.dart';
 import 'package:mobile_app_posthoop/widget/button/mainButton.dart';
-import 'package:mobile_app_posthoop/widget/label/loginLabel.dart';
+import 'package:mobile_app_posthoop/widget/label/registerLabel.dart';
 
-class LoginPage extends StatefulWidget {
-  LoginPage({Key key}) : super(key: key);
+class RegisterPage extends StatefulWidget {
+  RegisterPage({Key key}) : super(key: key);
 
   @override
-  _LoginPageState createState() => _LoginPageState();
+  _RegisterPageState createState() => _RegisterPageState();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class _RegisterPageState extends State<RegisterPage> {
   @override
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
@@ -25,17 +25,24 @@ class _LoginPageState extends State<LoginPage> {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
-                    LoginLabel(),
+                    RegisterLabel(),
                     GestureDetector(
                       onTap: () {
-                        Navigator.pushNamed(context, '/register');
+                        Navigator.pushNamed(context, '/login');
                       },
-                      child: MainButton(text: 'Inscription'),
+                      child: MainButton(text: 'Se connecter'),
                     ),
-                    SizedBox(height: height * .1),
+                    SizedBox(height: height * .05),
                     TextFormField(
                       decoration: InputDecoration(
                           labelText: 'Identifiant',
+                          filled: true,
+                          fillColor: Colors.grey.shade300),
+                    ),
+                    SizedBox(height: height * .02),
+                    TextFormField(
+                      decoration: InputDecoration(
+                          labelText: 'Email',
                           filled: true,
                           fillColor: Colors.grey.shade300),
                     ),
@@ -55,7 +62,7 @@ class _LoginPageState extends State<LoginPage> {
                         Navigator.pushNamed(context, '/');
                       },
                       child: GreyButton(
-                        text: 'Se connecter',
+                        text: 'S\'inscrire',
                       ),
                     )
                   ],

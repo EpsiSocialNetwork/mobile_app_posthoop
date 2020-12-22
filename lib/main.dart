@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mobile_app_posthoop/loginPage/loginPage.dart';
+import 'package:mobile_app_posthoop/registerPage/registerPage.dart';
 import 'package:mobile_app_posthoop/welcomePage/welcomePage.dart';
 
 void main() => runApp(MyApp());
@@ -29,7 +30,8 @@ class MyApp extends StatelessWidget {
       // home: MyHomePage(title: 'Flutter Demo Home Page'),
       routes: {
         '/': (context) => WelcomePage(),
-        '/login': (context) => LoginPage()
+        '/login': (context) => LoginPage(),
+        '/register': (context) => RegisterPage()
       },
     );
   }

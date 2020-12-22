@@ -30,7 +30,7 @@ class _WelcomePageState extends State<WelcomePage> {
                     SizedBox(height: height * .15),
                     GestureDetector(
                       onTap: () {
-                        Navigator.pushNamed(context, '/login');
+                        Navigator.pushNamed(context, '/register');
                       },
                       child: MainButton(
                         text: 'Inscription',
@@ -39,7 +39,7 @@ class _WelcomePageState extends State<WelcomePage> {
                     SizedBox(height: height * .05),
                     GestureDetector(
                       onTap: () {
-                        Navigator.pushNamed(context, '/');
+                        Navigator.pushNamed(context, '/login');
                       },
                       child: MainButton(
                         text: 'Connexion',
