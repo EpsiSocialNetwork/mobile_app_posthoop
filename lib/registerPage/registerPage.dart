@@ -59,7 +59,7 @@ class _RegisterPageState extends State<RegisterPage> {
                     SizedBox(height: height * .02),
                     GestureDetector(
                       onTap: () {
-                        Navigator.pushNamed(context, '/');
+                        Navigator.pushNamedAndRemoveUntil(context, '/home', (route) => false);
                       },
                       child: GreyButton(
                         text: 'S\'inscrire',

@@ -52,7 +52,7 @@ class _LoginPageState extends State<LoginPage> {
                     SizedBox(height: height * .02),
                     GestureDetector(
                       onTap: () {
-                        Navigator.pushNamed(context, '/');
+                        Navigator.pushNamedAndRemoveUntil(context, '/home', (route) => false);
                       },
                       child: GreyButton(
                         text: 'Se connecter',

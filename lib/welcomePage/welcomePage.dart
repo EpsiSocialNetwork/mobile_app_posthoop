@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mobile_app_posthoop/widget/button/mainButton.dart';
-import 'package:mobile_app_posthoop/widget/label/homeLabel.dart';
+import 'package:mobile_app_posthoop/widget/label/welcomeLabel.dart';
 
 class WelcomePage extends StatefulWidget {
   WelcomePage({Key key, this.title}) : super(key: key);
