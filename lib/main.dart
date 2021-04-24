@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+// Mobile App packages
 import 'package:mobile_app_posthoop/homePage/homePage.dart';
 import 'package:mobile_app_posthoop/loginPage/loginPage.dart';
 import 'package:mobile_app_posthoop/registerPage/registerPage.dart';
@@ -7,6 +9,8 @@ import 'package:mobile_app_posthoop/welcomePage/welcomePage.dart';
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
+  final _storage = FlutterSecureStorage();
+
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
