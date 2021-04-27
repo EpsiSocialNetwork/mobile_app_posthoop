@@ -9,8 +9,6 @@ import 'package:mobile_app_posthoop/welcomePage/welcomePage.dart';
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
-  final _storage = FlutterSecureStorage();
-
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {

@@ -3,6 +3,9 @@ import 'package:mobile_app_posthoop/widget/button/greyButton.dart';
 import 'package:mobile_app_posthoop/widget/button/mainButton.dart';
 import 'package:mobile_app_posthoop/widget/label/loginLabel.dart';
 
+// Mobile App packages
+import 'package:mobile_app_posthoop/services/authenticateService.dart';
+
 class LoginPage extends StatefulWidget {
   LoginPage({Key key}) : super(key: key);
 
@@ -11,6 +14,8 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  var auth = new AuthenticateService();
+
   @override
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
@@ -51,8 +56,8 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                     SizedBox(height: height * .02),
                     GestureDetector(
-                      onTap: () {
-                        Navigator.pushNamedAndRemoveUntil(context, '/home', (route) => false);
+                      onTap: () async {
+                        await auth.authenticate()? Navigator.pushNamedAndRemoveUntil(context, '/home', (route) => false) : null;
                       },
                       child: GreyButton(
                         text: 'Se connecter',
