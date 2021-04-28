@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 
 // Mobile App packages
 import 'package:mobile_app_posthoop/services/authenticateService.dart';
+import 'package:mobile_app_posthoop/models/post.dart';
+import 'package:mobile_app_posthoop/widget/post.dart';
 
 String token = "Hello";
 
@@ -17,7 +19,13 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
 
   int _selectedIndex = 0;
-  var posts;
+  List<Post> posts;
+
+  @override
+  void initState() {
+    super.initState();
+   _callUser();
+  }
 
   void _changeTitle(String newTitle) {
     setState(() {
@@ -33,33 +41,43 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
-  @override
-  Widget build(BuildContext context) {
+  AuthenticateService auth = new AuthenticateService();
+  bool _isAuth = false;
+  var _token = "";
 
-    AuthenticateService auth = new AuthenticateService();
-    bool _isAuth = false;
-    var _token = "";
-
-    void _callUser() async {
-      print("Token Equals ?");
-      print(_token == AuthenticateService.token);
-      final response = await http.get(Uri.parse('https://post.mignon.chat/post'),
-          headers: {
+  void _callUser() async {
+    print("Token Equals ?");
+    print(_token == AuthenticateService.token);
+    final response = await http.get(Uri.parse('https://post.mignon.chat/post'),
+        headers: {
           'Content-Type': 'application/json',
           'Accept': 'application/json',
           'Authorization': 'Bearer ${AuthenticateService.token}',
         }
-      );
-      print(response.body);
-      if(response.statusCode == 200){
-        this.setState(() {
-          posts = jsonDecode(response.body);
-        });
-      }
-
+    );
+    print(response.body);
+    if(response.statusCode == 200){
+      this.setState(() {
+        var list = jsonDecode(response.body);
+        var listPosts  = List<Post>.from(list.map((i) => Post.fromJson(i)));
+        listPosts.sort((a,b) => -a.createdAt.compareTo(b.createdAt));
+        posts = listPosts;
+      });
     }
 
+  }
+
+  @override
+  Widget build(BuildContext context) {
+
     List<Widget> _widgetOptions = <Widget>[
+      ListView.builder(
+        shrinkWrap: true,
+        itemCount: posts == null ? 0 : posts.length,
+        itemBuilder: (BuildContext context, int index){
+          return PostWidget(post: posts[index]);
+        },
+      ),
       Container(
         child: SingleChildScrollView(
           child: Column(
@@ -98,44 +116,6 @@ class _HomePageState extends State<HomePage> {
             ],
           ),
         ),
-      ),
-      ListView.builder(
-        shrinkWrap: true,
-        itemCount: posts == null ? 0 : posts.length,
-        itemBuilder: (BuildContext context, int index){
-          return new Card(
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: <Widget>[
-                  ListTile(
-                    leading: Icon(Icons.album),
-                    title: Text("Jules Peguet"),
-                    subtitle: Text(posts[index]["text"], style: TextStyle(fontSize: 20)),
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      TextButton(
-                        child: Icon(Icons.message),
-                        onPressed: () {/* ... */},
-                      ),
-                      const SizedBox(width: 8),
-                      TextButton(
-                        child: Icon(Icons.favorite_border),
-                        onPressed: () {/* ... */},
-                      ),
-                      const SizedBox(width: 8),
-                      TextButton(
-                        child: Icon(Icons.share),
-                        onPressed: () {/* ... */},
-                      ),
-                      const SizedBox(width: 8),
-                    ],
-                  ),
-                ],
-              ),
-            );
-        },
       ),
       ListView.builder(
         itemBuilder: (context, position) {
