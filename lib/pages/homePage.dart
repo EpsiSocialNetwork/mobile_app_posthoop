@@ -64,7 +64,10 @@ class _HomePageState extends State<HomePage> {
         posts = listPosts;
       });
     }
+  }
 
+  void _newPost() {
+    Navigator.pushNamed(context, '/new_post');
   }
 
   @override
@@ -136,9 +139,14 @@ class _HomePageState extends State<HomePage> {
           height: height,
           child: Stack(
               children: <Widget>[
-                _widgetOptions.elementAt(_selectedIndex)
+                _widgetOptions.elementAt(_selectedIndex),
           ]
         )
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: _newPost,
+        tooltip: 'Increment',
+        child: Icon(Icons.add),
       ),
       bottomNavigationBar: BottomNavigationBar(
         items: const <BottomNavigationBarItem>[
@@ -159,7 +167,6 @@ class _HomePageState extends State<HomePage> {
         selectedItemColor: Color.fromRGBO(255, 0, 61, 100),
         onTap: _onItemTapped,
       ),
-
     );
   }
 }

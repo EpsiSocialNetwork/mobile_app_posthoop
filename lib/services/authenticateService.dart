@@ -1,11 +1,12 @@
 import 'package:openid_client/openid_client_io.dart';
 import 'package:url_launcher/url_launcher.dart';
-
+import 'package:jwt_decoder/jwt_decoder.dart';
 import '../core/config/secure_storage.dart';
 
 class AuthenticateService{
   final _storage = new SecureStorage();
   static String token = "";
+  static String uidUser = "";
 
   String getToken(){
     return token;
@@ -22,6 +23,7 @@ class AuthenticateService{
   Future _saveToken(TokenResponse newToken) async {
     print("NEW TOKEN");
     token = newToken.accessToken;
+    uidUser = JwtDecoder.decode(newToken.accessToken)["user_id"];
     final pattern = new RegExp('.{1,800}'); // 800 is the size of each chunk
     pattern.allMatches(token).forEach((match) => print(match.group(0)));
     SecureStorage().saveToken(

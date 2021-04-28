@@ -32,9 +32,9 @@ class _PostWidget extends State<PostWidget> {
     var daysDifference = DateTime.now().difference(widget.post.createdAt).inDays;
     if(daysDifference == 0){
       var hoursDifference =  DateTime.now().difference(widget.post.createdAt).inHours;
-      if (hoursDifference > 24){
+      if (hoursDifference < 1){
         var minutesDifference = DateTime.now().difference(widget.post.createdAt).inMinutes;
-        if(minutesDifference > 60){
+        if(minutesDifference > 1){
           difference = minutesDifference.toString() + "min";
         } else {
           difference = DateTime.now().difference(widget.post.createdAt).inSeconds.toString() + "sec";
