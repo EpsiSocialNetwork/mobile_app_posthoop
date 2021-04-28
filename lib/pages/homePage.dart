@@ -1,11 +1,8 @@
-import 'dart:convert';
-import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 
 // Mobile App packages
 import 'package:mobile_app_posthoop/services/authenticateService.dart';
-import 'package:mobile_app_posthoop/models/post.dart';
-import 'package:mobile_app_posthoop/widget/post.dart';
+import 'package:mobile_app_posthoop/widget/postList.dart';
 
 String token = "Hello";
 
@@ -19,19 +16,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
 
   int _selectedIndex = 0;
-  List<Post> posts;
 
-  @override
-  void initState() {
-    super.initState();
-   _callUser();
-  }
-
-  void _changeTitle(String newTitle) {
-    setState(() {
-      token = newTitle;
-    });
-  }
   static const TextStyle optionStyle =
       TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
 
@@ -42,29 +27,6 @@ class _HomePageState extends State<HomePage> {
   }
 
   AuthenticateService auth = new AuthenticateService();
-  bool _isAuth = false;
-  var _token = "";
-
-  void _callUser() async {
-    print("Token Equals ?");
-    print(_token == AuthenticateService.token);
-    final response = await http.get(Uri.parse('https://post.mignon.chat/post'),
-        headers: {
-          'Content-Type': 'application/json',
-          'Accept': 'application/json',
-          'Authorization': 'Bearer ${AuthenticateService.token}',
-        }
-    );
-    print(response.body);
-    if(response.statusCode == 200){
-      this.setState(() {
-        var list = jsonDecode(response.body);
-        var listPosts  = List<Post>.from(list.map((i) => Post.fromJson(i)));
-        listPosts.sort((a,b) => -a.createdAt.compareTo(b.createdAt));
-        posts = listPosts;
-      });
-    }
-  }
 
   void _newPost() {
     Navigator.pushNamed(context, '/new_post');
@@ -74,13 +36,7 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
 
     List<Widget> _widgetOptions = <Widget>[
-      ListView.builder(
-        shrinkWrap: true,
-        itemCount: posts == null ? 0 : posts.length,
-        itemBuilder: (BuildContext context, int index){
-          return PostWidget(post: posts[index]);
-        },
-      ),
+      PostList(),
       Container(
         child: SingleChildScrollView(
           child: Column(
@@ -99,14 +55,6 @@ class _HomePageState extends State<HomePage> {
               ),
               Text('$token',
                 style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
-              ),
-              GestureDetector(
-                  onTap: () {
-                    _callUser();
-                  },
-                  child: Text(
-                      "Call User"
-                  ),
               ),
               GestureDetector(
                   onTap: () {
