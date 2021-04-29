@@ -16,7 +16,6 @@ class _NewPostPage extends State<NewPostPage> {
   final textController = TextEditingController();
 
   void _sendPost() async {
-    print(textController.text);
     final response = await http.post(Uri.parse('https://post.mignon.chat/post'),
       headers: {
         'Content-Type': 'application/json',

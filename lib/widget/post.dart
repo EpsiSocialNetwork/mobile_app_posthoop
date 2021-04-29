@@ -21,12 +21,17 @@ class PostWidget extends StatefulWidget {
 class _PostWidget extends State<PostWidget> {
 
   User _user = new User();
+  bool _postIsLiked = false;
+  int _numberOfLike = 0;
+  int _numberOfView = 0;
 
   @override
   void initState() {
     super.initState();
     _user.username = "Username";
     getUsername();
+    postIsLiked();
+    infoOnPost();
   }
 
   String displayedDate() {
@@ -66,6 +71,43 @@ class _PostWidget extends State<PostWidget> {
       };
     }
 
+  void postIsLiked() async {
+    final response = await http.get(Uri.parse('https://react.mignon.chat/${widget.post.uid}/like/${AuthenticateService.uidUser}'),
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+          'Authorization': 'Bearer ${AuthenticateService.token}',
+        }
+    );
+    if(response.statusCode == 200){
+      var like = jsonDecode(response.body);
+      this.setState(() {
+        _postIsLiked = like == 1 ? true : false;
+      });
+    }
+  }
+
+  void likePost() async {
+    if(_postIsLiked){
+      final response = await http.delete(Uri.parse('https://react.mignon.chat/${widget.post.uid}/like/${AuthenticateService.uidUser}'));
+    } else {
+      final response = await http.post(Uri.parse('https://react.mignon.chat/${widget.post.uid}/like/${AuthenticateService.uidUser}'));
+    }
+    postIsLiked();
+    infoOnPost();
+  }
+
+  void infoOnPost() async {
+    final response = await http.get(Uri.parse('https://react.mignon.chat/${widget.post.uid}'));
+    if(response.statusCode == 200){
+      var statut = jsonDecode(response.body);
+      this.setState(() {
+        _numberOfLike = statut["like"];
+        _numberOfView = statut["view"];
+      });
+    }
+  }
+
   void _respondPost() {
     Navigator.pushNamed(context, '/respond_post', arguments: CommentArgument(widget.post.uid, _user.fullname));
   }
@@ -92,9 +134,16 @@ class _PostWidget extends State<PostWidget> {
                 ),
                 const SizedBox(width: 8),
                 TextButton(
-                  child: Icon(Icons.favorite_border),
-                  onPressed: () {/* ... */},
+                  child: _postIsLiked ? Icon(Icons.favorite, color: Colors.pink) : Icon(Icons.favorite_border),
+                  onPressed: likePost,
                 ),
+                Text(_numberOfLike.toString()),
+                const SizedBox(width: 8),
+                TextButton(
+                  child: Icon(Icons.remove_red_eye),
+                  onPressed: () {},
+                ),
+                Text(_numberOfView.toString()),
                 const SizedBox(width: 8),
                 TextButton(
                   child: Icon(Icons.share),

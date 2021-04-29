@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 
 // Mobile App packages
 import 'package:mobile_app_posthoop/services/authenticateService.dart';
 import 'package:mobile_app_posthoop/widget/postList.dart';
+import 'package:mobile_app_posthoop/widget/userInfo.dart';
+import 'package:mobile_app_posthoop/models/user.dart';
 
 String token = "Hello";
 
@@ -27,9 +31,49 @@ class _HomePageState extends State<HomePage> {
   }
 
   AuthenticateService auth = new AuthenticateService();
+  User _user = new User();
 
   void _newPost() {
     Navigator.pushNamed(context, '/new_post');
+  }
+
+  void getUser() async {
+    final response = await http.get(Uri.parse('https://user.mignon.chat/user/${AuthenticateService.uidUser}'),
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+          'Authorization': 'Bearer ${AuthenticateService.token}',
+        }
+    );
+    print("before");
+    if(response.statusCode == 200){
+      print("after");
+      if(response.body.isEmpty){
+        print("New user");
+        print(AuthenticateService.username);
+        final response = await http.post(Uri.parse('https://user.mignon.chat/user'),
+            headers: {
+              'Content-Type': 'application/json',
+              'Accept': 'application/json',
+              'Authorization': 'Bearer ${AuthenticateService.token}',
+            },
+            body: jsonEncode({
+              'uid': AuthenticateService.uidUser,
+              'email': AuthenticateService.email,
+              'password': '',
+              'username': AuthenticateService.username,
+              'fullname': AuthenticateService.fullname
+            })
+        );
+        print(response.statusCode);
+      }
+    };
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getUser();
   }
 
   @override
@@ -68,16 +112,7 @@ class _HomePageState extends State<HomePage> {
           ),
         ),
       ),
-      ListView.builder(
-        itemBuilder: (context, position) {
-          return Card(
-            child: Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Text(position.toString(), style: TextStyle(fontSize: 22.0),),
-            ),
-          );
-        },
-      ),
+      UserInfoWidget()
     ];
 
     final height = MediaQuery.of(context).size.height;
@@ -103,12 +138,12 @@ class _HomePageState extends State<HomePage> {
             label: 'Home',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.add_circle_outline),
-            label: '',
+            icon: Icon(Icons.find_in_page_outlined),
+            label: 'Research',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.find_in_page_outlined),
-            label: 'Recherche',
+            icon: Icon(Icons.settings),
+            label: 'Settings',
           ),
         ],
         currentIndex: _selectedIndex,

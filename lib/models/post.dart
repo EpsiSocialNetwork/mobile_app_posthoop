@@ -2,7 +2,7 @@ class Post{
   String uid;
   String text;
   String uidUser;
-  String urlImage;
+  List<String> urlImage;
   DateTime createdAt;
 
   Post({this.uid, this.text, this.uidUser, this.urlImage, this.createdAt});
@@ -11,7 +11,7 @@ class Post{
     uid: json["uid"],
     text: json["text"],
     uidUser: json["uidUser"],
-    urlImage: json["urlImage"],
+    urlImage: json["urlImage"] != null ? null : json["urlImage"],
     createdAt: DateTime.parse(json["createdAt"])
   );
 }

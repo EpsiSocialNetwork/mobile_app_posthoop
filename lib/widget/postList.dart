@@ -26,10 +26,10 @@ class _PostList extends State<PostList> {
         }
     );
     if(response.statusCode == 200){
+      var list = jsonDecode(response.body);
+      var listPosts  = List<Post>.from(list.map((i) => Post.fromJson(i)));
+      listPosts.sort((a,b) => -a.createdAt.compareTo(b.createdAt));
       this.setState(() {
-        var list = jsonDecode(response.body);
-        var listPosts  = List<Post>.from(list.map((i) => Post.fromJson(i)));
-        listPosts.sort((a,b) => -a.createdAt.compareTo(b.createdAt));
         _posts = listPosts;
       });
     }

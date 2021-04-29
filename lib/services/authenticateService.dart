@@ -7,6 +7,9 @@ class AuthenticateService{
   final _storage = new SecureStorage();
   static String token = "";
   static String uidUser = "";
+  static String email = "";
+  static String fullname = "";
+  static String username = "";
 
   String getToken(){
     return token;
@@ -24,6 +27,9 @@ class AuthenticateService{
     print("NEW TOKEN");
     token = newToken.accessToken;
     uidUser = JwtDecoder.decode(newToken.accessToken)["user_id"];
+    email = JwtDecoder.decode(newToken.accessToken)["email"];
+    username = JwtDecoder.decode(newToken.accessToken)["preferred_username"];
+    fullname = JwtDecoder.decode(newToken.accessToken)["name"];
     final pattern = new RegExp('.{1,800}'); // 800 is the size of each chunk
     pattern.allMatches(token).forEach((match) => print(match.group(0)));
     SecureStorage().saveToken(

@@ -17,7 +17,6 @@ class _NewCommentPage extends State<NewCommentPage> {
   final textController = TextEditingController();
 
   void _sendPost(String uidPost) async {
-    print(textController.text);
     final response = await http.post(Uri.parse('https://post.mignon.chat/comment'),
         headers: {
           'Content-Type': 'application/json',
