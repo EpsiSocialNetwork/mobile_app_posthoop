@@ -8,9 +8,10 @@ import 'package:mobile_app_posthoop/models/user.dart';
 import 'package:mobile_app_posthoop/services/authenticateService.dart';
 
 class PostWidget extends StatefulWidget {
-  PostWidget({Key key, this.post}) : super(key: key);
+  PostWidget({Key key,@required this.post, this.onPressed}) : super(key: key);
 
   final Post post;
+  final GestureTapCallback onPressed;
 
   @override
   _PostWidget createState() => _PostWidget();
@@ -67,37 +68,40 @@ class _PostWidget extends State<PostWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: <Widget>[
-          ListTile(
-            leading: Icon(Icons.album),
-            title: Text("${_user.username} - ${displayedDate()}"),
-            subtitle: Text(widget.post.text, style: TextStyle(fontSize: 20)),
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              TextButton(
-                child: Icon(Icons.message),
-                onPressed: () {/* ... */},
-              ),
-              const SizedBox(width: 8),
-              TextButton(
-                child: Icon(Icons.favorite_border),
-                onPressed: () {/* ... */},
-              ),
-              const SizedBox(width: 8),
-              TextButton(
-                child: Icon(Icons.share),
-                onPressed: () {/* ... */},
-              ),
-              const SizedBox(width: 8),
-            ],
-          ),
-        ],
-      ),
+    return GestureDetector(
+      onTap: widget.onPressed,
+      child: Card(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            ListTile(
+              leading: Icon(Icons.album),
+              title: Text("${_user.fullname} - ${displayedDate()}"),
+              subtitle: Text(widget.post.text, style: TextStyle(fontSize: 20)),
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                TextButton(
+                  child: Icon(Icons.message),
+                  onPressed: () {/* ... */},
+                ),
+                const SizedBox(width: 8),
+                TextButton(
+                  child: Icon(Icons.favorite_border),
+                  onPressed: () {/* ... */},
+                ),
+                const SizedBox(width: 8),
+                TextButton(
+                  child: Icon(Icons.share),
+                  onPressed: () {/* ... */},
+                ),
+                const SizedBox(width: 8),
+              ],
+            ),
+          ],
+        ),
+      )
     );
   }
 }

@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 
 // Mobile App packages
 import 'package:mobile_app_posthoop/services/authenticateService.dart';
-import 'package:mobile_app_posthoop/models/post.dart';
 
 class NewPostPage extends StatefulWidget {
   NewPostPage({Key key}) : super(key: key);
