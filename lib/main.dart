@@ -3,6 +3,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 // Mobile App packages
 import 'package:mobile_app_posthoop/pages/homePage.dart';
 import 'package:mobile_app_posthoop/pages/loginPage.dart';
+import 'package:mobile_app_posthoop/pages/newCommentPage.dart';
 import 'package:mobile_app_posthoop/pages/postPage.dart';
 import 'package:mobile_app_posthoop/pages/registerPage.dart';
 import 'package:mobile_app_posthoop/pages/welcomePage.dart';
@@ -39,7 +40,8 @@ class MyApp extends StatelessWidget {
         '/login': (context) => LoginPage(),
         '/register': (context) => RegisterPage(),
         '/new_post': (context) => NewPostPage(),
-        '/post': (context) => PostPage()
+        '/post': (context) => PostPage(),
+        '/respond_post': (context) => NewCommentPage()
       },
     );
   }

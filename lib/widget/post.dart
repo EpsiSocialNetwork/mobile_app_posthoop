@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:mobile_app_posthoop/models/CommentArguments.dart';
 import 'dart:convert';
 
 // Mobile App packages
+import 'package:mobile_app_posthoop/services/authenticateService.dart';
 import 'package:mobile_app_posthoop/models/post.dart';
 import 'package:mobile_app_posthoop/models/user.dart';
-import 'package:mobile_app_posthoop/services/authenticateService.dart';
 
 class PostWidget extends StatefulWidget {
   PostWidget({Key key,@required this.post, this.onPressed}) : super(key: key);
@@ -65,6 +66,9 @@ class _PostWidget extends State<PostWidget> {
       };
     }
 
+  void _respondPost() {
+    Navigator.pushNamed(context, '/respond_post', arguments: CommentArgument(widget.post.uid, _user.fullname));
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -84,7 +88,7 @@ class _PostWidget extends State<PostWidget> {
               children: <Widget>[
                 TextButton(
                   child: Icon(Icons.message),
-                  onPressed: () {/* ... */},
+                  onPressed: _respondPost,
                 ),
                 const SizedBox(width: 8),
                 TextButton(
