@@ -103,7 +103,7 @@ class _PostWidget extends State<PostWidget> {
       var statut = jsonDecode(response.body);
       this.setState(() {
         _numberOfLike = statut["like"];
-        _numberOfView = statut["view"];
+        _numberOfView = int.parse(statut["view"]);
       });
     }
   }

@@ -125,7 +125,6 @@ class _UserInfoWidget extends State<UserInfoWidget> {
 
   void _follow() async {
     if(isFollow){
-      print('UnFollow the user');
       final response = await http.delete(Uri.parse('https://user.mignon.chat/follow'),
           headers: {
             'Content-Type': 'application/json',
@@ -142,7 +141,6 @@ class _UserInfoWidget extends State<UserInfoWidget> {
       });
       getFollowers();
     } else {
-      print('Follow the user');
       final response = await http.post(Uri.parse('https://user.mignon.chat/follow'),
           headers: {
             'Content-Type': 'application/json',
@@ -154,7 +152,6 @@ class _UserInfoWidget extends State<UserInfoWidget> {
             'followUidUser': _user.uid
           })
       );
-      print(response.body);
       if(response.statusCode == 201){
         getFollowers();
         this.setState(() {

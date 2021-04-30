@@ -48,7 +48,6 @@ class _PostList extends State<PostList> {
         }
     );
     if(response.statusCode == 200){
-      print("get follow");
       var list = jsonDecode(response.body);
       var listFollowings  = List<Follow>.from(list.map((i) => Follow.fromJson(i)));
       var uidsFollowings = listFollowings.map((follow) => follow.followUidUser).toList();
@@ -62,7 +61,8 @@ class _PostList extends State<PostList> {
 
   }
 
-  void _viewPost(Post post) {
+  void _viewPost(Post post) async {
+    final response = await http.put(Uri.parse('https://react.mignon.chat/${post.uid}/view'));
     Navigator.pushNamed(context, '/post', arguments: post);
   }
 

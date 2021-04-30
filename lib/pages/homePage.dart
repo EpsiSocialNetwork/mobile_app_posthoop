@@ -6,7 +6,6 @@ import 'package:http/http.dart' as http;
 import 'package:mobile_app_posthoop/services/authenticateService.dart';
 import 'package:mobile_app_posthoop/widget/personalUserInfo.dart';
 import 'package:mobile_app_posthoop/widget/postList.dart';
-import 'package:mobile_app_posthoop/widget/userInfo.dart';
 import 'package:mobile_app_posthoop/models/user.dart';
 
 String token = "Hello";
@@ -51,7 +50,6 @@ class _HomePageState extends State<HomePage> {
       print("after");
       if(response.body.isEmpty){
         print("New user");
-        print(AuthenticateService.username);
         final response = await http.post(Uri.parse('https://user.mignon.chat/user'),
             headers: {
               'Content-Type': 'application/json',
@@ -66,7 +64,6 @@ class _HomePageState extends State<HomePage> {
               'fullname': AuthenticateService.fullname
             })
         );
-        print(response.statusCode);
       }
     };
   }
@@ -83,34 +80,23 @@ class _HomePageState extends State<HomePage> {
     List<Widget> _widgetOptions = <Widget>[
       PostList(),
       Container(
-        child: SingleChildScrollView(
-          child: Column(
-            children: <Widget>[
-              Text(
-                'Index 0: Hello',
-                style: optionStyle,
-              ),
-              GestureDetector(
-                  onTap: () {
-                    auth.authenticate();
-                  },
-                  child: Text(
-                      "Login"
-                  )
-              ),
-              Text('$token',
-                style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
-              ),
-              GestureDetector(
-                  onTap: () {
-                    auth.logout();
-                  },
-                  child: Text(
-                      "disconnect"
-                  ),
-              ),
-            ],
-          ),
+        padding: EdgeInsets.all(100.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Text(
+              "Research will be soon added",
+              style: TextStyle(fontSize: 30),
+            ),
+            GestureDetector(
+                onTap: () {
+                  auth.logout();
+                },
+                child: Text(
+                    "disconnect"
+                ),
+            ),
+          ],
         ),
       ),
       PersonalUserInfoWidget()

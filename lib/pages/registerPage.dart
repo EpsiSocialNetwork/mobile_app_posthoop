@@ -3,6 +3,9 @@ import 'package:mobile_app_posthoop/widget/button/greyButton.dart';
 import 'package:mobile_app_posthoop/widget/button/mainButton.dart';
 import 'package:mobile_app_posthoop/widget/label/registerLabel.dart';
 
+// Mobile App packages
+import 'package:mobile_app_posthoop/services/authenticateService.dart';
+
 class RegisterPage extends StatefulWidget {
   RegisterPage({Key key}) : super(key: key);
 
@@ -11,6 +14,8 @@ class RegisterPage extends StatefulWidget {
 }
 
 class _RegisterPageState extends State<RegisterPage> {
+  var auth = new AuthenticateService();
+
   @override
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
@@ -58,8 +63,8 @@ class _RegisterPageState extends State<RegisterPage> {
                     ),
                     SizedBox(height: height * .02),
                     GestureDetector(
-                      onTap: () {
-                        Navigator.pushNamedAndRemoveUntil(context, '/home', (route) => false);
+                      onTap: () async {
+                        await auth.authenticate()? Navigator.pushNamedAndRemoveUntil(context, '/home', (route) => false) : null;
                       },
                       child: GreyButton(
                         text: 'S\'inscrire',

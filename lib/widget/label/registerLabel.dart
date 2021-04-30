@@ -10,8 +10,10 @@ class RegisterLabel extends StatelessWidget {
     return Container(
         child: Column(children: <Widget>[
           SizedBox(height: height * 0.1),
-          SvgPicture.asset('assets/gobelet-en-carton.svg',
-              height: 200, semanticsLabel: 'PostHoop Logo'),
+          SvgPicture.asset('assets/logo.svg',
+              color: Color.fromRGBO(33, 9, 102, 100),
+              height: 200,
+              semanticsLabel: 'PostHoop Logo'),
           SizedBox(height: height * 0.05),
           Text(
             'Déjà Hooper ?',
