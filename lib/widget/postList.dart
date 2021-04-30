@@ -5,6 +5,7 @@ import 'dart:convert';
 // Mobile App packages
 import 'package:mobile_app_posthoop/services/authenticateService.dart';
 import 'package:mobile_app_posthoop/models/post.dart';
+import 'package:mobile_app_posthoop/models/follow.dart';
 import 'package:mobile_app_posthoop/widget/post.dart';
 
 class PostList extends StatefulWidget {
@@ -16,9 +17,11 @@ class PostList extends StatefulWidget {
 
 class _PostList extends State<PostList> {
   List<Post> _posts = [];
+  List<Follow> _followings = [];
+  String _uidsFollowings = "";
 
   void _fetchUser() async {
-    final response = await http.get(Uri.parse('https://post.mignon.chat/post'),
+    final response = await http.get(Uri.parse('https://post.mignon.chat/post/timeline/user?uids=$_uidsFollowings'),
         headers: {
           'Content-Type': 'application/json',
           'Accept': 'application/json',
@@ -33,6 +36,30 @@ class _PostList extends State<PostList> {
         _posts = listPosts;
       });
     }
+  }
+
+  void _getFollowers() async {
+    final response = await http.get(Uri.parse(
+        'https://user.mignon.chat/user/${AuthenticateService.uidUser}/follow'),
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+          'Authorization': 'Bearer ${AuthenticateService.token}',
+        }
+    );
+    if(response.statusCode == 200){
+      print("get follow");
+      var list = jsonDecode(response.body);
+      var listFollowings  = List<Follow>.from(list.map((i) => Follow.fromJson(i)));
+      var uidsFollowings = listFollowings.map((follow) => follow.followUidUser).toList();
+      var stringUids = uidsFollowings.toString().replaceAll("[", "").replaceAll("]", "").replaceAll(" ", "");
+      this.setState(() {
+        _followings = listFollowings;
+        _uidsFollowings = stringUids;
+      });
+      _fetchUser();
+    }
+
   }
 
   void _viewPost(Post post) {
@@ -59,14 +86,14 @@ class _PostList extends State<PostList> {
 
   Future<void> _getData() async {
     setState(() {
-      _fetchUser();
+      _getFollowers();
     });
   }
 
   @override
   void initState() {
     super.initState();
-    _fetchUser();
+    _getFollowers();
   }
 
   @override

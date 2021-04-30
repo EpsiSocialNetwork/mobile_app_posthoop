@@ -116,6 +116,16 @@ class _PostWidget extends State<PostWidget> {
     Navigator.pushNamed(context, '/user', arguments: _user);
   }
 
+  _deletePost(String index) async {
+    final response = await http.delete(Uri.parse('https://post.mignon.chat/post/${widget.post.uid}'),
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+          'Authorization': 'Bearer ${AuthenticateService.token}',
+        }
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -157,6 +167,20 @@ class _PostWidget extends State<PostWidget> {
                   onPressed: () {/* ... */},
                 ),
                 const SizedBox(width: 8),
+                widget.post.uidUser == AuthenticateService.uidUser ?
+                PopupMenuButton(
+                  child: Icon(Icons.more_vert, color: Colors.blue),
+                  onSelected: _deletePost,
+                  itemBuilder: (context) {
+                    return {'Delete'}.map((String choice) {
+                      return PopupMenuItem<String>(
+                        value: choice,
+                        child: Text(choice),
+                      );
+                    }).toList();
+                  },
+                )
+                : Text("")
               ],
             ),
           ],
