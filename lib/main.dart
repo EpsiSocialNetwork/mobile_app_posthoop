@@ -8,6 +8,8 @@ import 'package:mobile_app_posthoop/pages/postPage.dart';
 import 'package:mobile_app_posthoop/pages/registerPage.dart';
 import 'package:mobile_app_posthoop/pages/welcomePage.dart';
 import 'package:mobile_app_posthoop/pages/newPostPage.dart';
+import 'package:mobile_app_posthoop/widget/userInfo.dart';
+import 'package:openid_client/openid_client.dart';
 
 void main() => runApp(MyApp());
 
@@ -41,7 +43,8 @@ class MyApp extends StatelessWidget {
         '/register': (context) => RegisterPage(),
         '/new_post': (context) => NewPostPage(),
         '/post': (context) => PostPage(),
-        '/respond_post': (context) => NewCommentPage()
+        '/respond_post': (context) => NewCommentPage(),
+        '/user': (context) => UserInfoWidget()
       },
     );
   }

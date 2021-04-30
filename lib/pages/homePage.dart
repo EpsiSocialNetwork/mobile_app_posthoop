@@ -4,6 +4,7 @@ import 'package:http/http.dart' as http;
 
 // Mobile App packages
 import 'package:mobile_app_posthoop/services/authenticateService.dart';
+import 'package:mobile_app_posthoop/widget/personalUserInfo.dart';
 import 'package:mobile_app_posthoop/widget/postList.dart';
 import 'package:mobile_app_posthoop/widget/userInfo.dart';
 import 'package:mobile_app_posthoop/models/user.dart';
@@ -112,7 +113,7 @@ class _HomePageState extends State<HomePage> {
           ),
         ),
       ),
-      UserInfoWidget()
+      PersonalUserInfoWidget()
     ];
 
     final height = MediaQuery.of(context).size.height;

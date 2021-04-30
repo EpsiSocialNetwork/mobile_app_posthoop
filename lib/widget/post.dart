@@ -112,6 +112,10 @@ class _PostWidget extends State<PostWidget> {
     Navigator.pushNamed(context, '/respond_post', arguments: CommentArgument(widget.post.uid, _user.fullname));
   }
 
+  void _viewUser() {
+    Navigator.pushNamed(context, '/user', arguments: _user);
+  }
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -122,7 +126,10 @@ class _PostWidget extends State<PostWidget> {
           children: <Widget>[
             ListTile(
               leading: Icon(Icons.album),
-              title: Text("${_user.fullname} - ${displayedDate()}"),
+              title:  GestureDetector(
+                onTap: _viewUser,
+                child: Text("${_user.fullname} - ${displayedDate()}"),
+              ),
               subtitle: Text(widget.post.text, style: TextStyle(fontSize: 20)),
             ),
             Row(

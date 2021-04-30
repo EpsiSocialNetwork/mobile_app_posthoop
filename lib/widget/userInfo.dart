@@ -17,12 +17,13 @@ _UserInfoWidget createState() => _UserInfoWidget();
 }
 
 class _UserInfoWidget extends State<UserInfoWidget> {
-
   User _user = new User();
   bool dataWasLoaded = false;
   List<Follow> _followers = [];
   List<Follow> _followings = [];
   List<Post> _posts = [];
+  bool isFirstBuid = true;
+  bool isFollow = false;
 
   List<String> months = [
     'January',
@@ -46,14 +47,10 @@ class _UserInfoWidget extends State<UserInfoWidget> {
     _user.username = "Username";
     _user.description = "Your description will apear here.";
     _user.createdAt = new DateTime.now();
-    getUser();
-    getPersonalsPosts();
-    getFollowings();
-    getFollowers();
   }
 
   void getUser() async {
-    final response = await http.get(Uri.parse('https://user.mignon.chat/user/${AuthenticateService.uidUser}'),
+    final response = await http.get(Uri.parse('https://user.mignon.chat/user/${_user.uid}'),
         headers: {
           'Content-Type': 'application/json',
           'Accept': 'application/json',
@@ -69,7 +66,7 @@ class _UserInfoWidget extends State<UserInfoWidget> {
   }
 
   void getFollowings() async {
-    final response = await http.get(Uri.parse('https://user.mignon.chat/user/${AuthenticateService.uidUser}/follow'),
+    final response = await http.get(Uri.parse('https://user.mignon.chat/user/${_user.uid}/follow'),
         headers: {
           'Content-Type': 'application/json',
           'Accept': 'application/json',
@@ -86,24 +83,27 @@ class _UserInfoWidget extends State<UserInfoWidget> {
   }
 
   void getFollowers() async {
-    final response = await http.get(Uri.parse('https://user.mignon.chat/user/${AuthenticateService.uidUser}/following'),
+    final response = await http.get(Uri.parse('https://user.mignon.chat/user/${_user.uid}/following'),
         headers: {
           'Content-Type': 'application/json',
           'Accept': 'application/json',
           'Authorization': 'Bearer ${AuthenticateService.token}',
         }
     );
+
     if(response.statusCode == 200){
       var list = jsonDecode(response.body);
       var listFollowings  = List<Follow>.from(list.map((i) => Follow.fromJson(i)));
+      var _isFollow = listFollowings.where((follow) => follow.uidUser == AuthenticateService.uidUser).length >= 1 ? true : false;
       this.setState(() {
+        isFollow = _isFollow;
         _followers = listFollowings;
       });
     }
   }
 
-  void getPersonalsPosts() async {
-    final response = await http.get(Uri.parse('https://post.mignon.chat/post/timeline/user?uids=${AuthenticateService.uidUser}'),
+  void getPosts() async {
+    final response = await http.get(Uri.parse('https://post.mignon.chat/post/timeline/user?uids=${_user.uid}'),
         headers: {
           'Content-Type': 'application/json',
           'Accept': 'application/json',
@@ -123,8 +123,45 @@ class _UserInfoWidget extends State<UserInfoWidget> {
     }
   }
 
-  void _follow(){
-
+  void _follow() async {
+    if(isFollow){
+      print('UnFollow the user');
+      final response = await http.delete(Uri.parse('https://user.mignon.chat/follow'),
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+            'Authorization': 'Bearer ${AuthenticateService.token}',
+          },
+          body: jsonEncode({
+            'uidUser': AuthenticateService.uidUser,
+            'followUidUser': _user.uid
+          })
+      );
+      this.setState(() {
+        isFollow = false;
+      });
+      getFollowers();
+    } else {
+      print('Follow the user');
+      final response = await http.post(Uri.parse('https://user.mignon.chat/follow'),
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+            'Authorization': 'Bearer ${AuthenticateService.token}',
+          },
+          body: jsonEncode({
+            'uidUser': AuthenticateService.uidUser,
+            'followUidUser': _user.uid
+          })
+      );
+      print(response.body);
+      if(response.statusCode == 201){
+        getFollowers();
+        this.setState(() {
+          isFollow = true;
+        });
+      }
+    }
   }
 
   void _viewPost(Post post) {
@@ -151,13 +188,25 @@ class _UserInfoWidget extends State<UserInfoWidget> {
 
   Future<void> _getData() async {
     setState(() {
-      getPersonalsPosts();
+      getPosts();
     });
   }
 
   @override
   Widget build(BuildContext context) {
+    final User _userFromPost = ModalRoute.of(context).settings.arguments;
     final height = MediaQuery.of(context).size.height;
+
+    this.setState(() {
+      _user = _userFromPost;
+    });
+
+    if(isFirstBuid){
+      getPosts();
+      getFollowings();
+      getFollowers();
+      isFirstBuid = false;
+    }
 
     return Scaffold(
         body: Container(
@@ -165,6 +214,15 @@ class _UserInfoWidget extends State<UserInfoWidget> {
           child: Column(
             children: <Widget>[
               SizedBox(height: height * .05),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: <Widget>[
+                  TextButton(
+                    child: Icon(Icons.close),
+                    onPressed: () {Navigator.pop(context);},
+                  ),
+                ],
+              ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: <Widget>[
@@ -186,7 +244,10 @@ class _UserInfoWidget extends State<UserInfoWidget> {
                       )
                     ]
                   ),
-                  TextButton(onPressed: _follow, child: Text("Following")),
+                  TextButton(
+                    child: isFollow ? Text("Follower") : Text("Subscribe"),
+                    onPressed: _follow,
+                  ),
                 ],
               ),
               Text(_user.description),
